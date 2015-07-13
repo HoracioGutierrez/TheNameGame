@@ -62,7 +62,8 @@ if (Meteor.isClient) {
 
   Template.layout.helpers({
     currentGame: function() {
-      return {id: Session.get('currentGameId')};
+      var gameId = Session.get('currentGameId');
+      return gameId ? {id: gameId} : null;
     },
 
     inGamePage: function() {
