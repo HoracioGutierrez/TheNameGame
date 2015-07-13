@@ -1,0 +1,64 @@
+<head>
+  <title>The Name Game</title>
+</head>
+<body></body>
+
+<template name="layout">
+  <p>
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+
+    {{#if currentGame}}
+      {{#unless inGamePage}}
+        <div style="float: right">
+          {{#linkTo route="game" data=currentGame}}
+            ← Go back to game
+          {{/linkTo}}
+        </div>
+      {{/unless}}
+    {{/if}}
+  </p>
+
+  <h1>The Name Game, son!</h1>
+
+  {{> yield}}
+</template>
+
+<template name="home">
+  <p>
+    <button id="new-game">Start new game</button>
+  </p>
+</template>
+
+<template name="loading">
+  Loading...
+</template>
+
+<template name="login">
+  <p>You need to sign in to play the game. {{> loginButtons}}</p>
+</template>
+
+<template name="game">
+  Hey, {{> loginButtons}}
+
+  <h2>Playas'</h2>
+
+  <ol>
+    {{#each players}}
+      <li style="margin: 2.5px 0">
+        <span style="display: inline-block; width: 20%">
+          {{username id}}
+        </span>
+        {{#unless isCurrentUser id}}
+          <input type="text" value="{{card}}" style="width: 60%"/>
+        {{/unless}}
+      </li>
+    {{/each}}
+  </ol>
+</template>
+
+<template name="about">
+  <h2>About...</h2>
+
+  <p>Pending.</p>
+</template>
