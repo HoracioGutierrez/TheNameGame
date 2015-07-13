@@ -68,11 +68,17 @@ if (Meteor.isClient) {
 
     inGamePage: function() {
       return Router.current().route.getName() == 'game';
+    },
+
+    linkActiveClassFor: function(routeName) {
+      console.log('linkActiveClassFor ' + routeName);
+      console.log('current route name: ' + Router.current().route.getName());
+      return Router.current().route.getName() == routeName ? 'active' : '';
     }
   });
 
   Template.home.events({
-    'click button': function() {
+    'click #new-game': function() {
       Router.go('/new');
     }
   });
@@ -81,11 +87,17 @@ if (Meteor.isClient) {
     players: function() {
       var game = Games.findOne({_id: Session.get('currentGameId')})
       if(game) {
-        return game.players.filter(function(p) {
+        var players = game.players.filter(function(p) {
           return Meteor.users
                        .find({_id: p.id, 'status.online': true})
                        .count() == 1;
         });
+        var number = 1;
+        players = players.map(function(p) {
+          p.number = number++;
+          return p;
+        });
+        return players;
       }
     },
 

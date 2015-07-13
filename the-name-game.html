@@ -1,64 +1,180 @@
 <head>
   <title>The Name Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body></body>
 
 <template name="layout">
-  <p>
-    <a href="/">Home</a>
-    <a href="/about">About</a>
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed"
+                data-toggle="collapse" data-target="#navbar-collapse"
+                aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        {{#linkTo route="home" class="navbar-brand"}}
+          The Name Game
+        {{/linkTo}}
+      </div>
 
-    {{#if currentGame}}
-      {{#unless inGamePage}}
-        <div style="float: right">
-          {{#linkTo route="game" data=currentGame}}
-            ← Go back to game
-          {{/linkTo}}
-        </div>
-      {{/unless}}
-    {{/if}}
-  </p>
+      <div class="collapse navbar-collapse" id="navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li class="{{linkActiveClassFor 'about'}}">
+            {{#linkTo route="about"}}About{{/linkTo}}
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          {{#if currentGame}}
+            {{#unless inGamePage}}
+              <li>
+                {{#linkTo route="game" data=currentGame}}
+                  ← Go back to game
+                {{/linkTo}}
+              </li>
+            {{/unless}}
+          {{/if}}
 
-  <h1>The Name Game, son!</h1>
+          {{> loginButtons}}
+        </ul>
+      </div>
+    </div>
+  </nav>
 
-  {{> yield}}
+  <div class="container">
+    {{> yield}}
+  </div>
 </template>
 
 <template name="home">
-  <p>
-    <button id="new-game">Start new game</button>
+  <p class="text-center">
+    <a id="new-game" class="btn btn-primary btn-lg" role="button">
+      Start New Game
+    </a>
   </p>
+
+  <h2>What is <em>The Name Game?</em></h2>
+
+  <p>
+    Have you ever been in a Google Hangouts or Skype call with your
+    friends and wanted to play that name guessing game they play in the
+    <a href="http://www.imdb.com/title/tt0361748/">Inglorious Basterds</a>
+    movie? Well, thanks to this awesome little webapp, now you can! Don't
+    believe me? Just click the blue button above!
+  </p>
+
+  <p>
+    If you have no idea what I'm talking about, just watch the clip below.
+  </p>
+
+  <div class="embed-responsive embed-responsive-16by9">
+    <iframe class="embed-responsive-item"
+            src="//www.youtube.com/embed/VLseUhQhGeU?rel=0"
+            allowfullscreen></iframe>
+  </div>
 </template>
 
 <template name="loading">
-  Loading...
+  <p class="lead text-center">Loading...</p>
 </template>
 
 <template name="login">
-  <p>You need to sign in to play the game. {{> loginButtons}}</p>
+  <p class="lead text-center">You need to sign in to play the game.</p>
 </template>
 
 <template name="game">
-  Hey, {{> loginButtons}}
+  <div class="game">
+    <div class="panel panel-primary">
+      <div class="panel-heading">Players</div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Player</th>
+            <th>Card</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each players}}
+            <tr>
+              <th scope="row">{{number}}</th>
+              <td>{{username id}}</td>
+              <td>
+                {{#unless isCurrentUser id}}
+                  <input type="text" value="{{card}}"/>
+                {{/unless}}
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
 
-  <h2>Playas'</h2>
+    <p class="text-center">
+      To invite people to this game, just point them to the current URL.
+    </p>
+  </div>
+
+  <hr/>
+
+  <h2>Instructions</h2>
 
   <ol>
-    {{#each players}}
-      <li style="margin: 2.5px 0">
-        <span style="display: inline-block; width: 20%">
-          {{username id}}
-        </span>
-        {{#unless isCurrentUser id}}
-          <input type="text" value="{{card}}" style="width: 60%"/>
-        {{/unless}}
-      </li>
-    {{/each}}
+    <li>
+      Call your friends on Google Hangouts or Skype.
+    </li>
+    <li>
+      Invite your friends to this game by sharing the current URL in your
+      browser's address bar.
+    </li>
+    <li>
+      Make sure everyone has a character name written on their card. Cards are
+      publicly editable and anyone can write on anyone else's card except their
+      own.
+    </li>
+    <li>
+      Now you're ready to play the game! For an example of how to play, check
+      out the video on the {{#linkTo route="home"}}home page{{/linkTo}}.
+    </li>
   </ol>
+
+  <h4>A note on cheating</h4>
+
+  <p>
+    It's possible for anyone to cheat by joining the game from a second user
+    account and seeing what's written in their card. Do not do this. Don't be a
+    party pooper. Keep the game fun!
+  </p>
 </template>
 
 <template name="about">
-  <h2>About...</h2>
+  <div class="about row">
+    <div class="col-md-8 col-md-offset-2">
+      <p>
+        <em>The Name Game</em> is a multiplayer name guessing game inspired by a
+        <a href="https://www.youtube.com/watch?v=VLseUhQhGeU">scene</a> from the
+        <a href="http://www.imdb.com/title/tt0361748/">Inglorious Basterds</a>
+        movie.
+      </p>
 
-  <p>Pending.</p>
+      <p>
+        This webapp is built with <a href="http://meteor.com">Meteor</a>.
+      </p>
+
+      <p>
+        You can check out the source code on GitHub
+        <a href="https://github.com/LeandroLovisolo/TheNameGame">here</a>.
+      </p>
+
+      <hr/>
+
+      <p>
+        Built by <a href="http://leandro.me">Leandro Lovisolo</a> with love.
+      </p>
+    </div>
+  </div>
 </template>

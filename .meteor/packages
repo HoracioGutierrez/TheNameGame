@@ -6,8 +6,10 @@
 
 meteor-platform
 insecure
-accounts-ui
 accounts-password
 iron:router
 reywood:publish-composite
 mizzao:user-status
+nemo64:bootstrap
+less
+ian:accounts-ui-bootstrap-3
